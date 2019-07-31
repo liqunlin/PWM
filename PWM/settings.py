@@ -200,15 +200,15 @@ CONSUL_JOB_DIR = 'prometheus-job'
 CONSUL_PROMETHEUS_RULES_DIR = 'prometheus-rules'
 CONSUL_ALERTMANAGER_DIR = 'alertmanager-config'
 
-SMS_URL = 'http://172.18.100.168:20019/esbsmstrue/api/sms/general/send'
-SENDMAIL_SMTP = 'smtp.jieyuechina.com:25'
-SENDMAIL_SENDER = 'chaoyan1@jieyuechina.com'
-SENDMAIL_SENDER_PASSWORD = 'Chinayc19880510#'
+SMS_URL = ''
+SENDMAIL_SMTP = ''
+SENDMAIL_SENDER = ''
+SENDMAIL_SENDER_PASSWORD = ''
 
 MONTIOR_REDIS = '10.50.182.65'
 MONTIOR_PORT = 6379
 
-WX_URL = 'http://outrel.jieyue.com/outrel/api/externalplatform/interfaceRest/extInterface/v2'
+WX_URL = ''
 
 ALERTMANAGER_HTTP = 'http://10.50.182.65:9093'
 ALERTMANAGER_SILENCES_URI = '/api/v2/silences'
