@@ -168,7 +168,7 @@ class Police(object):
             "sysCode": "weChat",
             "funcType": "weChat",
             "funcPointType": "skynetEarlyWarning",
-            "frontTransNo": "Q1001F3D7BB211111afgdsafs1",
+            "frontTransNo": "",
             "frontTransTime": time1,
             "interfaceNo": "skynetEarlyWarning",
             "prod": "weChat",
