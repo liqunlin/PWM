@@ -18,7 +18,6 @@ pygobject==3.22.0
 pygpgme==0.3
 pyliblzma==0.5.3
 python-consul==1.1.0
-python-linux-procfs==0.4.9
 pytz==2019.1
 pyudev==0.15
 pyxattr==0.5.1
