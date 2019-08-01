@@ -5,7 +5,6 @@ decorator==3.4.0
 Django==1.11.22
 django-cors-headers==3.0.2
 djangorestframework==3.9.4
-futures==3.2.0
 grpc==0.3.post19
 idna==2.8
 iniparse==0.4
