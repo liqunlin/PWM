@@ -23,7 +23,6 @@ pyudev==0.15
 pyxattr==0.5.1
 redis==3.3.2
 requests==2.22.0
-schedutils==0.4
 seobject==0.1
 sepolicy==1.1
 six==1.12.0
