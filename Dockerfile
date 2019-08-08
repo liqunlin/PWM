@@ -11,6 +11,11 @@ ENV REDIS_IP="10.50.182.65"
 ENV REDIS_PORT=6380
 ENV MONTIOR_PORT=6380
 ENV CONSUL_PORT=8500
+ENV WX_URL="http://outrel.jieyue.com/outrel/api/externalplatform/interfaceRest/extInterface/v2"
+ENV SMS_URL="http://172.18.100.168:20019/esbsmstrue/api/sms/general/send"
+ENV SENDMAIL_SMTP="smtp.jieyuechina.com:25"
+ENV SENDMAIL_SENDER="chaoyan1@jieyuechina.com"
+ENV SENDMAIL_SENDER_PASSWORD=""
 ADD PWM.tar.gz /opt/
 ADD 19.1.1.tar.gz /opt/
 ADD ez_setup.py /opt/
@@ -27,4 +32,4 @@ RUN chmod +x /opt/install.sh
 EXPOSE 888
 #CMD ["python manage.py runserver 0.0.0.0:888"]
 #ENTRYPOINT ["/bin/bash","-c"]
-ENTRYPOINT /opt/install.sh ${CONSUL_IP} ${MONTIOR_REDIS} ${ALERTMANAGER_HTTP} ${REDIS_IP} ${REDIS_PORT} ${MONTIOR_PORT} ${CONSUL_PORT}
+ENTRYPOINT /opt/install.sh ${CONSUL_IP} ${MONTIOR_REDIS} ${ALERTMANAGER_HTTP} ${REDIS_IP} ${REDIS_PORT} ${MONTIOR_PORT} ${CONSUL_PORT} ${WX_URL} ${SMS_URL} ${SENDMAIL_SMTP} ${SENDMAIL_SENDER} ${SENDMAIL_SENDER_PASSWORD}

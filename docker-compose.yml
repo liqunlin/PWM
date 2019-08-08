@@ -31,7 +31,7 @@ services:
       - consul1
 
   pwm:
-    image: pwm:v1.1.1-13
+    image: nginx2012/pwm_manager:v1.1.1
     ports:
       - '88:888'
     links:
@@ -45,12 +45,17 @@ services:
       - REDIS_PORT=6381
       - MONTIOR_PORT=6381
       - CONSUL_PORT=18500
+      - WX_URL=""
+      - SMS_URL=""
+      - SENDMAIL_SMTP=""
+      - SENDMAIL_SENDER=""
+      - SENDMAIL_SENDER_PASSWORD=""
     depends_on:
       - redis
       - consul3
 
   alertmanager:
-    image: alertmanager:v1.1.1-4
+    image: nginx2012/alertmanager:v1.1.1
     ports:
       - '9093:9093'
     links:
@@ -66,7 +71,7 @@ services:
       - pwm
  
   prometheus:
-    image: prom:v1.1.1-15
+    image: nginx2012/prometheus:v1.1.1
     ports: 
       - '9091:9090'
     links:
@@ -80,7 +85,7 @@ services:
       - alertmanager
 
   pwm-web:
-    image: pwm-web:v1.1.1-28
+    image: nginx2012/pwm-web_manager:v1.1.1
     links:
       - pwm
     ports:
