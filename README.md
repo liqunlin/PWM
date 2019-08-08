@@ -43,33 +43,136 @@ PWM 静默管理
 # 安装部署
 
 python-2.7.5 Django-1.11.22 djangorestframework-3.9.4 node-v10.15.0 npm-6.4.1
-
-1. 后端安装
-  cd PWM/  
-  pip install -r requirements.txt  
-  python manage.py makemigrations  
-  python manage.py migrate  
-  python manage.py runserver 0.0.0.0:888
   
-2. 前端安装
-  前端代码地址
-  [PWM-web](https://github.com/yanchao3/PWM-web)
-  
-  部署需要安装node npm  
-  注： 在启动服务之前，cd PWM-web && grep -R 10.50.182.65 \*, 把文件中的ip地址修改成你后端服务的ip地址   
-  npm install -g @vue/cli  
-  cd PWM-web/jy_cmdb_vue  
-  npm run dev
-  
-  docker启动方式, 包括: 后端代码 前端代码 prometheus+confd alertmanager+confd consul
+  ##docker启动方式, 包括: 后端代码 前端代码 prometheus+confd alertmanager+confd consul
   1. 安装compose
   sudo curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+  
   chmod +x /usr/local/bin/docker-compose
+  
   cp /usr/local/bin/docker-compose /usr/bin/
   
   2.在PWM目录中，修改docker-compose.yml
   cd PWM
-  vim docker-compose.yml
   
+  vim docker-compose.yml, 把ip地址更换为本机ip地址
+  sed -i 's/10.50.182.65/${self_ipaddress}/g' docker-compose.yml
+  ```
+  version: '3'
+services:
+  redis:
+    image: redis:latest
+    ports:
+      - '6381:6379'
+
+  consul1:
+    image: consul
+    container_name: node1
+    ports:
+      - "18500:8500"
+    command: agent -server -bootstrap-expect 3 -ui -disable-host-node-id -client 0.0.0.0 -bind 0.0.0.0
+
+  consul2:
+    image: consul
+    container_name: node2
+    ports:
+      - "18501:8500"
+    command: agent -server -ui -join node1 -disable-host-node-id -client 0.0.0.0 -bind 0.0.0.0
+    depends_on:
+      - consul1
+
+  consul3:
+    image: consul
+    container_name: node3
+    ports:
+      - "18502:8500"
+    command: agent -server -ui -join node1 -disable-host-node-id -client 0.0.0.0 -bind 0.0.0.0
+    depends_on:
+      - consul1
+
+  pwm:
+    image: nginx2012/pwm_manager:v1.1.1
+    ports:
+      - '88:888'
+    links:
+      - redis
+      - consul1
+    environment:
+      - CONSUL_IP=10.50.182.65
+      - MONTIOR_REDIS= 10.50.182.65
+      - ALERTMANAGER_HTTP=10.50.182.65:9093
+      - REDIS_IP=10.50.182.65
+      - REDIS_PORT=6381
+      - MONTIOR_PORT=6381
+      - CONSUL_PORT=18500
+      # 企业微信url
+      - WX_URL=""
+      # 短信报警url
+      - SMS_URL=""
+      # 邮件的smtp地址
+      - SENDMAIL_SMTP=""
+      # 哪个邮箱进行报警邮件的发送
+      - SENDMAIL_SENDER=""
+      # 发送报警邮件的邮箱密码
+      - SENDMAIL_SENDER_PASSWORD=""
+    depends_on:
+      - redis
+      - consul3
+
+  alertmanager:
+    image: nginx2012/alertmanager:v1.1.1
+    ports:
+      - '9093:9093'
+    links:
+      - consul1
+      - pwm
+    environment:
+      - CONSUL_IP=10.50.182.65
+      - CONSUL_PORT=18500
+      - PWM_PORT=88
+      - PWM_IP=10.50.182.65
+    depends_on:
+      - consul3
+      - pwm
+ 
+  prometheus:
+    image: nginx2012/prometheus:v1.1.1
+    ports: 
+      - '9091:9090'
+    links:
+      - consul1
+    environment:
+      - CONSUL_IP=10.50.182.65
+      - CONSUL_PORT=18500
+      - ALTERMANAGER_IP=10.50.182.65:9093
+    depends_on:
+      - consul3
+      - alertmanager
+
+  pwm-web:
+    image: nginx2012/pwm-web_manager:v1.1.1
+    links:
+      - pwm
+    ports:
+      - '8088:8080'
+    environment:
+      - DJANGO_ADDESS=10.50.182.65
+      - DJANGO_PORT=88
+      - WEB_PORT=8080
+    depends_on:
+      - pwm
+  ```
+  
+  3. cd PWM && docker-compose up
+  
+  4. 访问http://ip:8088 管理界面地址
+  
+     访问http://ip:88 后台接口地址
+    
+     访问http://ip:18500 consul管理界面地址
+     
+     访问http://ip:9091 prometheus管理界面地址
+     
+     访问http://ip:9093 alertmanaer管理界面地址
   
   
