@@ -59,7 +59,17 @@ python-2.7.5 Django-1.11.22 djangorestframework-3.9.4 node-v10.15.0 npm-6.4.1
   注： 在启动服务之前，cd PWM-web && grep -R 10.50.182.65 \*, 把文件中的ip地址修改成你后端服务的ip地址   
   npm install -g @vue/cli  
   cd PWM-web/jy_cmdb_vue  
-  npm run dev  
+  npm run dev
+  
+  docker启动方式, 包括: 后端代码 前端代码 prometheus+confd alertmanager+confd consul
+  1. 安装compose
+  sudo curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+  chmod +x /usr/local/bin/docker-compose
+  cp /usr/local/bin/docker-compose /usr/bin/
+  
+  2.在PWM目录中，修改docker-compose.yml
+  cd PWM
+  vim docker-compose.yml
   
   
   
