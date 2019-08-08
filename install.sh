@@ -1,6 +1,8 @@
 #!/bin/bash
 BASE_DIR=/opt/PWM
 
+echo $1
+
 cd $BASE_DIR && sed -i '/CONSUL_IP/d' PWM/settings.py
 cd $BASE_DIR && echo "CONSUL_IP = '$1'" >> PWM/settings.py
 

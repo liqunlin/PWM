@@ -9,14 +9,14 @@ services:
     image: consul
     container_name: node1
     ports:
-      - "18500:18500"
+      - "18500:8500"
     command: agent -server -bootstrap-expect 3 -ui -disable-host-node-id -client 0.0.0.0 -bind 0.0.0.0
 
   consul2:
     image: consul
     container_name: node2
     ports:
-      - "18501:18501"
+      - "18501:8500"
     command: agent -server -ui -join node1 -disable-host-node-id -client 0.0.0.0 -bind 0.0.0.0
     depends_on:
       - consul1
@@ -25,29 +25,60 @@ services:
     image: consul
     container_name: node3
     ports:
-      - "18502:18502"
+      - "18502:8500"
     command: agent -server -ui -join node1 -disable-host-node-id -client 0.0.0.0 -bind 0.0.0.0
     depends_on:
       - consul1
 
   pwm:
-    image: pwm:v1.1.1-8
+    image: pwm:v1.1.1-13
     ports:
       - '88:888'
     links:
       - redis
       - consul1
     environment:
-      - CONSUL_IP=consul1
-      - MONTIOR_REDIS=redis
-      - ALERTMANAGER_HTTP=10.50.182.65:9300
-      - REDIS_IP=redis
+      - CONSUL_IP=10.50.182.65
+      - MONTIOR_REDIS= 10.50.182.65
+      - ALERTMANAGER_HTTP=10.50.182.65:9093
+      - REDIS_IP=10.50.182.65
       - REDIS_PORT=6381
       - MONTIOR_PORT=6381
       - CONSUL_PORT=18500
     depends_on:
       - redis
       - consul3
+
+  alertmanager:
+    image: alertmanager:v1.1.1-4
+    ports:
+      - '9093:9093'
+    links:
+      - consul1
+      - pwm
+    environment:
+      - CONSUL_IP=10.50.182.65
+      - CONSUL_PORT=18500
+      - PWM_PORT=88
+      - PWM_IP=10.50.182.65
+    depends_on:
+      - consul3
+      - pwm
+ 
+  prometheus:
+    image: prom:v1.1.1-15
+    ports: 
+      - '9091:9090'
+    links:
+      - consul1
+    environment:
+      - CONSUL_IP=10.50.182.65
+      - CONSUL_PORT=18500
+      - ALTERMANAGER_IP=10.50.182.65:9093
+    depends_on:
+      - consul3
+      - alertmanager
+
   pwm-web:
     image: pwm-web:v1.1.1-28
     links:
@@ -55,7 +86,7 @@ services:
     ports:
       - '8088:8080'
     environment:
-      - DJANGO_ADDESS=pwm
+      - DJANGO_ADDESS=10.50.182.65
       - DJANGO_PORT=88
       - WEB_PORT=8080
     depends_on:
