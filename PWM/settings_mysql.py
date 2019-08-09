@@ -121,11 +121,11 @@ DATABASES = {
     #}
     'default': {
        'ENGINE': 'django.db.backends.mysql',
-       'NAME': 'novel',
-       'USER': 'novel',
-       'PASSWORD': 'novel',
-       'HOST': '10.50.182.29',
-       'PORT': '3306',
+       'NAME': 'pwm_db',
+       'USER': 'pwm_user',
+       'PASSWORD': 'pwm_passwd',
+       'HOST': 'pwm_db_host',
+       'PORT': 'pwm_db_port',
     }
 }
 
