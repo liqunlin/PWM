@@ -31,12 +31,15 @@ services:
       - consul1
 
   pwm:
-    image: nginx2012/pwm_manager:v1.1.1
+    image: nginx2012/pwm_manager:v1.1.11
     ports:
       - '88:888'
     links:
       - redis
       - consul1
+    volumes:
+      - /data/mgmt/migrations:/opt/PWM/mgmt/migrations
+      - /data/monitor/migrations:/opt/PWM/monitor/migrations
     environment:
       - CONSUL_IP=10.50.182.65
       - MONTIOR_REDIS= 10.50.182.65
@@ -45,11 +48,16 @@ services:
       - REDIS_PORT=6381
       - MONTIOR_PORT=6381
       - CONSUL_PORT=18500
-      - WX_URL=""
-      - SMS_URL=""
-      - SENDMAIL_SMTP=""
-      - SENDMAIL_SENDER=""
-      - SENDMAIL_SENDER_PASSWORD=""
+      - WX_URL="http://outrel.jieyue.com/outrel/api/externalplatform/interfaceRest/extInterface/v2"
+      - SMS_URL="http://172.18.100.168:20019/esbsmstrue/api/sms/general/send"
+      - SENDMAIL_SMTP="smtp.jieyuechina.com:25"
+      - SENDMAIL_SENDER="chaoyan1@jieyuechina.com"
+      - SENDMAIL_SENDER_PASSWORD="Chinayc19880510"
+      - MYSQL_USER=pwm
+      - MYSQL_PASSWORD=pwm
+      - MYSQL_DB=pwm
+      - MYSQL_IP=10.50.182.59
+      - MYSQL_PORT=3306
     depends_on:
       - redis
       - consul3

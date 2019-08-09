@@ -3,12 +3,16 @@ BASE_DIR=/opt/PWM
 
 if [ ${16} ];
 then
+#cd $BASE_DIR && /bin/cp -f PWM/settings_mysql.py PWM/settings.py
+cd $BASE_DIR && sed -i 's/pwm_db/'${15}'/g' PWM/settings_mysql.py
+cd $BASE_DIR && sed -i 's/pwm_user/'${13}'/g' PWM/settings_mysql.py
+cd $BASE_DIR && sed -i 's/pwm_passwd/'${14}'/g' PWM/settings_mysql.py
+cd $BASE_DIR && sed -i 's/pwm_host/'${16}'/g' PWM/settings_mysql.py
+cd $BASE_DIR && sed -i 's/pwm_port/'${17}'/g' PWM/settings_mysql.py
 cd $BASE_DIR && /bin/cp -f PWM/settings_mysql.py PWM/settings.py
-cd $BASE_DIR && sed -i 's/pwm_db/'${15}'/g' PWM/settings.py
-cd $BASE_DIR && sed -i 's/pwm_user/'${13}'/g' PWM/settings.py
-cd $BASE_DIR && sed -i 's/pwm_passwd/'${14}'/g' PWM/settings.py
-cd $BASE_DIR && sed -i 's/pwm_db_host/'${16}'/g' PWM/settings.py
-cd $BASE_DIR && sed -i 's/pwm_db_port/'${17}'/g' PWM/settings.py
+
+echo ${16} >> /tmp/test
+echo ${17} >> /tmp/test
 fi
 
 cd $BASE_DIR && sed -i '/CONSUL_IP/d' PWM/settings.py

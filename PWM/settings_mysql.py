@@ -124,8 +124,8 @@ DATABASES = {
        'NAME': 'pwm_db',
        'USER': 'pwm_user',
        'PASSWORD': 'pwm_passwd',
-       'HOST': 'pwm_db_host',
-       'PORT': 'pwm_db_port',
+       'HOST': 'pwm_host',
+       'PORT': 'pwm_port',
     }
 }
 
