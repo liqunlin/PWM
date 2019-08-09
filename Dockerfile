@@ -32,8 +32,8 @@ RUN yum install gcc gcc-c++ gcc-devel python-devel mysql-devel -y
 RUN python setup.py install
 WORKDIR $PROJECT_DIR
 RUN pip install -r requirements.txt
-RUN python manage.py makemigrations
-RUN python manage.py migrate
+#RUN python manage.py makemigrations
+#RUN python manage.py migrate
 RUN chmod +x /opt/install.sh
 EXPOSE 888
 #CMD ["python manage.py runserver 0.0.0.0:888"]

@@ -51,5 +51,8 @@ cd $BASE_DIR && echo "SENDMAIL_SENDER = ${11}" >> PWM/settings.py
 cd $BASE_DIR && sed -i '/SENDMAIL_SENDER_PASSWORD/d' PWM/settings.py
 cd $BASE_DIR && echo "SENDMAIL_SENDER_PASSWORD = ${12}" >> PWM/settings.py
 
+cd $BASE_DIR && python manage.py makemigrations
+cd $BASE_DIR && python manage.py migrate
+
 
 cd $BASE_DIR && python manage.py runserver 0.0.0.0:888
